@@ -264,6 +264,8 @@ require('lazy').setup({
       },
     },
   },
+  { 'nvim-tree/nvim-web-devicons', opts = {} },
+  { 'prichrd/netrw.nvim', opts = {} },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -342,18 +344,19 @@ require('lazy').setup({
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
   {
     'linux-cultist/venv-selector.nvim',
-    dependencies = { 'neovim/nvim-lspconfig', 'nvim-telescope/telescope.nvim', 'mfussenegger/nvim-dap-python' },
-    opts = {
-      -- Your options go here
-      name = { '.venv', 'venv' },
-      auto_refresh = false,
+    dependencies = {
+      'neovim/nvim-lspconfig',
+      'mfussenegger/nvim-dap',
+      'mfussenegger/nvim-dap-python', --optional
+      { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
     },
-    event = 'VeryLazy', -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
+    lazy = false,
+    branch = 'regexp', -- This is the regexp branch, use this for the new version
+    config = function()
+      require('venv-selector').setup()
+    end,
     keys = {
-      -- Keymap to open VenvSelector to pick a venv.
-      { '<leader>vs', '<cmd>VenvSelect<cr>' },
-      -- Keymap to retrieve the venv from a cache (the one previously used for the same project directory).
-      { '<leader>vc', '<cmd>VenvSelectCached<cr>' },
+      { ',v', '<cmd>VenvSelect<cr>' },
     },
   },
 
@@ -454,6 +457,40 @@ require('lazy').setup({
           prompt_title = 'Live Grep in Open Files',
         }
       end, { desc = '[S]earch [/] in Open Files' })
+
+      -- Shortcut for searching your Projects
+      local function is_linux_os()
+        -- Checks if the operating system is linux based or windows
+        -- returns true if linux, false otherwise
+        return package.config:sub(1, 1) == '/'
+      end
+
+      local function get_projects_path()
+        -- returns path to projects
+        if is_linux_os() then
+          return os.getenv 'HOME' .. '/Projects'
+        else
+          return os.getenv 'USERPROFILE' .. '\\Projects'
+        end
+      end
+
+      vim.keymap.set('n', '<leader>sp', function()
+        builtin.live_grep {
+          prompt_title = 'Search within your project directory',
+          cwd = get_projects_path(),
+          additional_args = function()
+            return { '--hidden' }
+          end,
+        }
+      end, { desc = '[S]earch in [P]rojects' })
+      -- Key mapping to search files in the directory of the current file
+      vim.keymap.set('n', '<leader>sc', function()
+        builtin.find_files {
+          prompt_title = 'Search Current Directory',
+          cwd = vim.fn.expand '%:p:h',
+          hidden = true,
+        }
+      end, { desc = '[S]earch directory of the [C]urrent file' })
 
       -- Shortcut for searching your Neovim configuration files
       vim.keymap.set('n', '<leader>sn', function()
