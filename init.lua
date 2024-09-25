@@ -93,6 +93,10 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
 
+-- configure python provider for NeoVim
+vim.g.python3_host_prog = vim.fn.exepath 'python'
+vim.g.loaded_python3_provider = nil
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
@@ -266,6 +270,42 @@ require('lazy').setup({
   },
   { 'nvim-tree/nvim-web-devicons', opts = {} },
   { 'prichrd/netrw.nvim', opts = {} },
+
+  -- Greeter nvim - start page
+  {
+    'goolord/alpha-nvim',
+    dependencies = { 'echasnovski/mini.icons' },
+    config = function()
+      require('alpha').setup(require('alpha.themes.startify').config)
+    end,
+  },
+
+  -- Magma-nvim: plugin for running code interactively with Jupyter
+  {
+    'dccsillag/magma-nvim',
+    version = '*',
+    lazy = false,
+    -- workaround while debugging other stuff
+    ft = { 'ipynb' },
+    keys = {
+      { '<leader>mi', '<cmd>MagmaInit<CR>', desc = 'This command initializes a runtime for the current buffer.' },
+      { '<leader>mo', '<cmd>MagmaEvaluateOperator<CR>', desc = 'Evaluate the text given by some operator.' },
+      { '<leader>ml', '<cmd>MagmaEvaluateLine<CR>', desc = 'Evaluate the current line.' },
+      { '<leader>mv', '<cmd>MagmaEvaluateVisual<CR>', desc = 'Evaluate the selected text.' },
+      { '<leader>mc', '<cmd>MagmaEvaluateOperator<CR>', desc = 'Reevaluate the currently selected cell.' },
+      { '<leader>mr', '<cmd>MagmaRestart!<CR>', desc = 'Shuts down and restarts the current kernel.' },
+      { '<leader>mx', '<cmd>MagmaInterrupt<CR>', desc = 'Interrupts the currently running cell and does nothing if not cell is running.' },
+    },
+  },
+  -- Jupynum: plugin for running jupyter notebooks on nvim
+  --{
+  --  'kiyoon/jupynium.nvim',
+  --build = 'pip3 install --user .',
+  --   build = 'conda run --no-capture-output -n scai-ext-exp pip install .',
+  -- enabled = vim.fn.isdirectory(vim.fn.expand "~/miniconda3/envs/jupynium"),
+  --},
+  --'rcarriga/nvim-notify', -- optional
+  --'stevearc/dressing.nvim', -- optional, UI for :JupyniumKernelSelect
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
