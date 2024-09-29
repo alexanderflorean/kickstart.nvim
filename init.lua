@@ -268,8 +268,18 @@ require('lazy').setup({
       },
     },
   },
-  { 'nvim-tree/nvim-web-devicons', opts = {} },
-  { 'prichrd/netrw.nvim', opts = {} },
+  {
+    'nvim-neo-tree/neo-tree.nvim',
+    branch = 'v3.x',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons',
+      'MunifTanjim/nui.nvim',
+      '3rd/image.nvim', -- Image preview support, see '# Preview Mode' for details
+    },
+  },
+
+  --{ 'prichrd/netrw.nvim', opts = {} },
 
   -- Greeter nvim - start page
   {
@@ -281,22 +291,22 @@ require('lazy').setup({
   },
 
   -- Magma-nvim: plugin for running code interactively with Jupyter
-  {
-    'dccsillag/magma-nvim',
-    version = '*',
-    lazy = false,
-    -- workaround while debugging other stuff
-    ft = { 'ipynb' },
-    keys = {
-      { '<leader>mi', '<cmd>MagmaInit<CR>', desc = 'This command initializes a runtime for the current buffer.' },
-      { '<leader>mo', '<cmd>MagmaEvaluateOperator<CR>', desc = 'Evaluate the text given by some operator.' },
-      { '<leader>ml', '<cmd>MagmaEvaluateLine<CR>', desc = 'Evaluate the current line.' },
-      { '<leader>mv', '<cmd>MagmaEvaluateVisual<CR>', desc = 'Evaluate the selected text.' },
-      { '<leader>mc', '<cmd>MagmaEvaluateOperator<CR>', desc = 'Reevaluate the currently selected cell.' },
-      { '<leader>mr', '<cmd>MagmaRestart!<CR>', desc = 'Shuts down and restarts the current kernel.' },
-      { '<leader>mx', '<cmd>MagmaInterrupt<CR>', desc = 'Interrupts the currently running cell and does nothing if not cell is running.' },
-    },
-  },
+  --{
+  --  'dccsillag/magma-nvim',
+  --  version = '*',
+  --  lazy = false,
+  --  -- workaround while debugging other stuff
+  --  ft = { 'ipynb' },
+  --  keys = {
+  --    { '<leader>mi', '<cmd>MagmaInit<CR>', desc = 'This command initializes a runtime for the current buffer.' },
+  --    { '<leader>mo', '<cmd>MagmaEvaluateOperator<CR>', desc = 'Evaluate the text given by some operator.' },
+  --    { '<leader>ml', '<cmd>MagmaEvaluateLine<CR>', desc = 'Evaluate the current line.' },
+  --    { '<leader>mv', '<cmd>MagmaEvaluateVisual<CR>', desc = 'Evaluate the selected text.' },
+  --    { '<leader>mc', '<cmd>MagmaEvaluateOperator<CR>', desc = 'Reevaluate the currently selected cell.' },
+  --    { '<leader>mr', '<cmd>MagmaRestart!<CR>', desc = 'Shuts down and restarts the current kernel.' },
+  --    { '<leader>mx', '<cmd>MagmaInterrupt<CR>', desc = 'Interrupts the currently running cell and does nothing if not cell is running.' },
+  --  },
+  --},
   -- Jupynum: plugin for running jupyter notebooks on nvim
   --{
   --  'kiyoon/jupynium.nvim',
