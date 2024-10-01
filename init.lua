@@ -273,6 +273,15 @@ require('lazy').setup({
       'MunifTanjim/nui.nvim',
       '3rd/image.nvim', -- Image preview support, see '# Preview Mode' for details
     },
+    keys = {
+      {
+        '<leader>e',
+        function()
+          require('neo-tree.command').execute { toggle = true, reveal = true, dir = vim.loop.cwd() }
+        end,
+        desc = 'Neo-tree reveal file [E]xplorer',
+      },
+    },
   },
 
   -- Greeter nvim - start page
@@ -373,7 +382,7 @@ require('lazy').setup({
       require('venv-selector').setup()
     end,
     keys = {
-      { ',v', '<cmd>VenvSelect<cr>' },
+      { '<leader>v', '<cmd>VenvSelect<cr>' },
     },
   },
 
