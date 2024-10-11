@@ -230,7 +230,7 @@ require('lazy').setup({
       {
         '<leader>e',
         function()
-          require('neo-tree.command').execute { toggle = true, reveal = true, dir = vim.loop.cwd() }
+          require('neo-tree.command').execute { reveal = true, dir = vim.loop.cwd() }
         end,
         desc = 'Neo-tree reveal file [E]xplorer',
       },
@@ -260,6 +260,74 @@ require('lazy').setup({
   -- Then, because we use the `config` key, the configuration only runs
   -- after the plugin has been loaded:
   --  config = function() ... end
+  --
+  -- Iron-Repl
+  {
+    'hkupty/iron.nvim',
+    config = function()
+      local iron = require 'iron.core'
+
+      iron.setup {
+        config = {
+          -- Whether a repl should be discarded or not
+          scratch_repl = true,
+          -- Your repl definitions come here
+          repl_definition = {
+            sh = {
+              command = { 'powershell' },
+            },
+            python = {
+              command = { 'python3' }, -- or { "ipython", "--no-autoindent" }
+              format = require('iron.fts.common').bracketed_paste_python,
+            },
+          },
+          -- How the repl window will be displayed
+          repl_open_cmd = require('iron.view').split.vertical.botright(0.4),
+        },
+        -- Iron doesn't set keymaps by default anymore.
+        -- You can set them here or manually add keymaps to the functions in iron.core
+        keymaps = vim.g.which_key_available and nil or {
+          send_motion = '<leader>ic',
+          visual_send = '<leader>iv',
+          send_file = '<leader>if',
+          send_line = '<leader>il',
+          send_paragraph = '<leader>ip',
+          send_until_cursor = '<leader>iu',
+          send_mark = '<leader>im',
+          mark_motion = '<leader>mc',
+          mark_visual = '<leader>mc',
+          remove_mark = '<leader>md',
+          cr = '<leader>i<cr>',
+          interrupt = '<leader>i<space>',
+          exit = '<leader>iq',
+          clear = '<leader>cl',
+        },
+        spec = {
+          { '<leader>ic', group = '[I]ron repl send [C]ode Motion', mode = { 'n', 'v' } },
+          { '<leader>if', group = '[I]ron repl send [F]ile' },
+          { '<leader>iv', group = '[I]ron repl [V]isual send' },
+          { '<leader>il', group = '[I]ron repl send [L]ine' },
+          { '<leader>ip', group = '[I]ron repl send [P]aragraph' },
+          { '<leader>iu', group = '[I]ron repl send [U]ntil Cursor' },
+          { '<leader>im', group = '[I]ron repl send [M]ark' },
+          { '<leader>mc', group = 'Iron repl [M]ark [C]ode', mode = { 'n', 'v' } },
+          { '<leader>md', group = 'Iron repl [M]ark [D]elete' },
+          { '<leader>i<cr>', group = '[I]ron repl send [C]arriage Return' },
+          { '<leader>i<space>', group = '[I]ron repl send Interrupt' },
+          { '<leader>iq', group = '[I]ron send [Q]uit' },
+          { '<leader>cl', group = '[Cl]ear' },
+          { '<leader>xf', group = 'Focus REPL', mode = { 'n' } },
+        },
+        -- If the highlight is on, you can change how it looks
+        highlight = {
+          italic = true,
+        },
+        ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
+      }
+    end,
+    --lazy = true,
+    --cmd = { 'IronRepl', 'IronRestart', 'IronFocus', 'IronHide' },
+  },
 
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
@@ -882,6 +950,8 @@ require('lazy').setup({
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+
+  -- Repl pluging
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
