@@ -403,7 +403,7 @@ require('lazy').setup({
       require('venv-selector').setup()
     end,
     keys = {
-      { '<leader>v', '<cmd>VenvSelect<cr>' },
+      { '<leader>v', '<cmd>VenvSelect<cr>', desc = 'Select [V]irtual environment' },
     },
   },
 
